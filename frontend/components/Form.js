@@ -13,21 +13,30 @@ export function Form(props) {
   } = props
 
   const onChange = evt => {
-    inputChange(evt.text)
+    const {id, value } = evt.target
+    console.log('evt.target', evt.target);
+    inputChange({ id, value })
   }
 
   const onSubmit = evt => {
     evt.preventDefault()
-    postQuiz(evt.question_text, evt.true_answer_text, evt.false_answer_text)
+    postQuiz(form)
   }
+
+  const enableSubmitBtn =
+    props.form.newQuestion.trim('').length > 0 &&
+    props.form.newTrueAnswer.trim('').length > 0 &&
+    props.form.newFalseAnswer.trim('').length > 0
+    
+
 
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
-      <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
-      <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
-      <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <input maxLength={50} onChange={onChange} id="newQuestion" value={form.newQuestion} placeholder="Enter question" />
+      <input maxLength={50} onChange={onChange} id="newTrueAnswer" value={form.newTrueAnswer} placeholder="Enter true answer" />
+      <input maxLength={50} onChange={onChange} id="newFalseAnswer" value={form.newFalseAnswer} placeholder="Enter false answer" />
+      <button id="submitNewQuizBtn" disabled={!enableSubmitBtn}>Submit new quiz</button>
     </form>
   )
 }

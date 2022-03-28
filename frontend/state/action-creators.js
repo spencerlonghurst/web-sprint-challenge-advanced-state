@@ -24,11 +24,11 @@ export function selectAnswer(answer) {
 export function setMessage(message) {
   return {type: SET_INFO_MESSAGE, payload: message}
 }
-export function inputChange(text) {
-  return {type: INPUT_CHANGE, payload: text}
+export function inputChange({id, value}) {
+  return {type: INPUT_CHANGE, payload: {id, value}}
 }
-export function resetForm(value) {
-  return {type: RESET_FORM, payload: value}
+export function resetForm() {
+  return {type: RESET_FORM}
 }
 
 // ❗ Async action creators
@@ -71,15 +71,15 @@ export function postAnswer(quiz_id, answer_id) {
     })
   }
 }
-export function postQuiz(question_text, true_answer_text, false_answer_text) {
+export function postQuiz(input) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
-    axios.post('http://localhost:9000/api/quiz/new', { question_text, true_answer_text, false_answer_text })
+    axios.post('http://localhost:9000/api/quiz/new', { question_text: input.newQuestion, true_answer_text: input.newTrueAnswer, false_answer_text: input.newFalseAnswer })
     .then(res => {
-      console.log(res)
-      dispatch(setMessage(res.data.message))
+      console.log('res.data.message',res.data.message)
+      dispatch(setMessage(`Congrats: "${res.data.question}" is a great question!`))
       dispatch(resetForm())
       debugger
     })
