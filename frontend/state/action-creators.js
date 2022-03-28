@@ -46,24 +46,47 @@ export function fetchQuiz() {
       .catch(err => {
         // console.log('GET err', err)
         debugger
-        dispatch({ type: null, payload: err.response.data.error})
+        // dispatch({ type: null, payload: err.response.data.error})
 
       })
   }
 }
-export function postAnswer() {
+export function postAnswer(quiz_id, answer_id) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
     // - Dispatch the fetching of the next quiz
+    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id, answer_id })
+    .then(res => {
+      console.log('res', res)
+      dispatch(selectAnswer(null));
+      dispatch(setMessage(res.data.message));
+      console.log('message', res.data.message)
+      dispatch(fetchQuiz())
+    })
+    .catch(err => {
+      debugger
+      // dispatch({ type: null, payload: err.response.data.error})
+    })
   }
 }
-export function postQuiz() {
+export function postQuiz(question_text, true_answer_text, false_answer_text) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
+    axios.post('http://localhost:9000/api/quiz/new', { question_text, true_answer_text, false_answer_text })
+    .then(res => {
+      console.log(res)
+      dispatch(setMessage(res.data.message))
+      dispatch(resetForm())
+      debugger
+    })
+    .catch(err => {
+      console.log(err)
+      debugger
+    })
   }
 }
 // ❗ On promise rejections, use log statements or breakpoints, and put an appropriate error message in state

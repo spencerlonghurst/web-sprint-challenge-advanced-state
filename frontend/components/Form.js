@@ -4,12 +4,21 @@ import * as actionCreators from '../state/action-creators'
 
 export function Form(props) {
 
-  const onChange = evt => {
+  console.log('props.form:',props.form)
 
+  const {
+    postQuiz,
+    inputChange,
+    form,
+  } = props
+
+  const onChange = evt => {
+    inputChange(evt.text)
   }
 
   const onSubmit = evt => {
-
+    evt.preventDefault()
+    postQuiz(evt.question_text, evt.true_answer_text, evt.false_answer_text)
   }
 
   return (
